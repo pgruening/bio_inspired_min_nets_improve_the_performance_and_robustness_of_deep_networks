@@ -1,0 +1,8 @@
+Starting Training 
+Found 20 processes. 
+Mean exp. memory usage 1935.5524607999992 
+Max exp. memory usage 2492.9942016 
+Min exp. memory usage 1378.11072 
+Add process 0 with exp. mem usage 2492.9942016 to GPU 0 with free memory 10012 
+Add process 1 with exp. mem usage 2492.9942016 to GPU 0 with free memory 7519.0057984 
+Add process 2 with exp. mem usage 2492.9942016 to GPU 0 with free memory 5026.011596799999 
