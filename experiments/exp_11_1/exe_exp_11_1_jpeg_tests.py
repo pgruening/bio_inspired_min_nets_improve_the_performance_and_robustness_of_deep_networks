@@ -1,18 +1,10 @@
-import sys
-sys.path.append(
-    '/nfshome/gruening/my_code/DLBio_repos/min_nets_svrhm_2021_code_submission'
-)
-
 import subprocess
 from os.path import join
 
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import run_jpeg_robustness_tests as jpeg_test
 from DLBio import pt_run_parallel
-from DLBio.helpers import (MyDataFrame, check_mkdir, get_sub_dataframe,
-                           load_json, search_rgx, set_plt_font_size)
+from DLBio.helpers import MyDataFrame, check_mkdir, load_json, search_rgx
 from DLBio.kwargs_translator import get_kwargs
 from experiments.eval_methods import create_jpeg_plot, create_table
 from helpers import predict_needed_gpu_memory

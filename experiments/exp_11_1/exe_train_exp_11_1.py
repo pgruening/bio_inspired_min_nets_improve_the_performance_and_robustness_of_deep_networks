@@ -1,12 +1,6 @@
 import copy
 from os.path import join
 
-import sys
-sys.path.append(
-    '/nfshome/gruening/my_code/DLBio_repos/min_nets_svrhm_2021_code_submission'
-)
-
-
 import torch
 from DLBio import kwargs_translator, pt_run_parallel
 from DLBio.helpers import check_mkdir, load_json, search_rgx

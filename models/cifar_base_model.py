@@ -1,8 +1,3 @@
-"""
-Essential to reproduce:
-exp0
-exp1
-"""
 import warnings
 
 import torch.nn as nn
