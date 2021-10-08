@@ -9,3 +9,4 @@ min_net_jpeg_predictions.zip
 min_net_models.zip
 min_net_jpeg_predictions/*
 experiments/**/*.npy
+min_nets_latest.zip
