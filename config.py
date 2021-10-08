@@ -18,6 +18,8 @@ USER = 'docker'
 if USER == 'docker':
     DATA_FOLDER = '/workingdir/data'
     PRINT_FREQUENCY = 50
+    DOWNLOADED_MODELS = 'min_net_models'
+    DOWNLOADED_PREDICTIONS = 'min_net_jpeg_predictions'
 
 DO_NOT_COPY = [
     'test_cases',

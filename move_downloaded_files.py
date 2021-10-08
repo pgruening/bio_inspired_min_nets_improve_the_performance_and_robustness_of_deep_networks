@@ -2,8 +2,7 @@ import re
 import shutil
 from os import walk
 from os.path import isdir, join
-
-DOWNLOADED_MODELS = 'saved_models'
+from config import DOWNLOADED_MODELS, DOWNLOADED_PREDICTIONS
 
 
 def run():

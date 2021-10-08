@@ -5,3 +5,5 @@
 data/*
 debug_**
 **/model_predictions/*
+min_net_jpeg_predictions.zip
+min_net_models.zip
