@@ -3,3 +3,5 @@
 **/model.pt
 .vscode/*
 data/*
+debug_**
+**/model_predictions/*

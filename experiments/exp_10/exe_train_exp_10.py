@@ -1,11 +1,6 @@
 import copy
 from os.path import join
 
-import sys
-sys.path.append(
-    '/nfshome/gruening/my_code/DLBio_repos/min_nets_svrhm_2021_code_submission'
-)
-
 import torch
 from DLBio import kwargs_translator, pt_run_parallel
 from DLBio.helpers import check_mkdir, load_json, search_rgx
@@ -13,7 +8,7 @@ from helpers import get_data_loaders, load_model, predict_needed_gpu_memory
 from log_tensorboard import log_tensorboard
 
 DEFAULT_KWARGS = {
-    'comment': 'exp7: mobilenets with FP-Blocks',
+    'comment': 'exp10: Compare PyrResNet to Min-net',
     'lr': 0.1,
     'wd': 0.0001,
     'mom': 0.9,
@@ -48,10 +43,8 @@ BASE_FOLDER = 'experiments/exp_10'
 
 # only use the layer-start method
 MODELS = [
-    # 'CifarMinFP-LS',
-    # 'CifarResNet',
-    # 'CifarPyrResNet',
-    'CifarMinFP-LS-RNBasic'
+    'CifarMinFP-LS',
+    'CifarPyrResNet',
 ]
 
 AVAILABLE_GPUS = [0, 1, 2, 3]
@@ -91,8 +84,7 @@ def run():
     base_folder = join(BASE_FOLDER, 'exp_data')
 
     def param_generator():
-        for p in _param_generator(default_kwargs, base_folder):
-            yield p
+        yield from _param_generator(default_kwargs, base_folder)
 
     _run(param_generator)
 
@@ -135,8 +127,7 @@ def one_epoch_test():
     output.pop('fixed_steps')
 
     def param_generator():
-        for p in _param_generator(output, base_folder, seeds=[0], num_blocks=[3]):
-            yield p
+        yield from _param_generator(output, base_folder, seeds=[0], num_blocks=[3])
 
     _run(param_generator)
 
@@ -156,8 +147,9 @@ def one_model_test(model_type):
     output.pop('fixed_steps')
 
     def param_generator():
-        for p in _param_generator(output, base_folder, seeds=[0], models=[model_type], num_blocks=[3]):
-            yield p
+        yield from _param_generator(
+            output, base_folder, seeds=[0], models=[model_type], num_blocks=[3]
+        )
 
     _run(param_generator)
 
@@ -173,11 +165,7 @@ def _check_tensorboard(folder, out_name, *, add_images):
         'cpu'), new_model_path=join(folder, 'model.pt')
     )
 
-    if add_images:
-        data_loaders = get_data_loaders(options)
-    else:
-        data_loaders = None
-
+    data_loaders = get_data_loaders(options) if add_images else None
     log_tensorboard(folder, tb_out, data_loaders,
                     model=model, remove_old_events=True,
                     input_shape=(1, 3, 32, 32)
@@ -194,10 +182,7 @@ def check_tensorboard_one_epoch():
         out_name = join('one_epoch_test', folder_name)
         folder = join(BASE_FOLDER, 'one_epoch_test', folder_name)
 
-        if idx == 0:
-            add_images = True
-        else:
-            add_images = False
+        add_images = idx == 0
         _check_tensorboard(folder, out_name, add_images=add_images)
 
 

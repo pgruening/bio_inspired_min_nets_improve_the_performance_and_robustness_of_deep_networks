@@ -25,23 +25,15 @@ AGG = {
     'num_params': 'first',
 }
 COLORS['CifarMinFP-LS'] = 'b'
-COLORS['CifarAbsReLU-LS'] = 'brown'
-COLORS['CifarMinFP-LS-RNBasic'] = 'cornflowerblue'
 IDENT_KEYS = ['model_type', 'N', 'seed']
 
 # models of interest
-MOIS = ['CifarMinFP-LS', 'CifarResNet',
-        'CifarPyrResNet', 'CifarMinFP-LS-RNBasic']
+MOIS = ['CifarMinFP-LS', 'CifarPyrResNet']
 LINESTYLES = {
     'CifarMinFP-LS': '-',
-    'CifarMinFP-LS-RNBasic': '-',
-    'CifarResNet': '--',
     'CifarPyrResNet': '--',
 }
 SUBSETS = {
-    'all': ['CifarMinFP-LS', 'CifarResNet',
-            'CifarPyrResNet', 'CifarMinFP-LS-RNBasic'],
-    'ResNet': ['CifarMinFP-LS-RNBasic', 'CifarResNet'],
     'PyrResNet': ['CifarMinFP-LS', 'CifarPyrResNet'],
 }
 
@@ -62,7 +54,7 @@ def run():
 
     df_grouped = df.groupby(by=['model_type', 'N'], as_index=False).agg(
         AGG).sort_values(by=(USED_METRIC, 'mean'))
-    df_grouped.to_csv(join(BASE_FOLDER, 'grouped_results.xlsx'))
+    df_grouped.to_csv(join(BASE_FOLDER, 'grouped_results.csv'))
 
     with open(join(BASE_FOLDER, 'results.md'), 'w') as file:
         file.write(df_grouped.to_markdown())

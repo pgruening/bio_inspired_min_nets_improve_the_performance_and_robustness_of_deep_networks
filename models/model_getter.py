@@ -1,8 +1,6 @@
 from . import cifar_base_model, cifar_densenet
 from torchvision.models import mobilenet_v2
 
-EXP0_MODELS = ['CifarResNet']
-
 EXP_10_MODELS = ['CifarMinFP-LS', 'CifarMinFP-ALL', 'CifarMinFP-LS-RNBasic']
 
 EXP_11_MODELS = [
@@ -11,12 +9,7 @@ EXP_11_MODELS = [
 
 
 def get_model(model_type, input_dim, output_dim, device, **kwargs):
-    if model_type in EXP0_MODELS:
-        # exp0
-        model = cifar_base_model.get_model(
-            model_type, input_dim, output_dim, device, **kwargs
-        )
-    elif model_type in EXP_10_MODELS:
+    if model_type in EXP_10_MODELS:
         model = cifar_base_model.get_model(
             model_type, input_dim, output_dim, device, **kwargs
         )

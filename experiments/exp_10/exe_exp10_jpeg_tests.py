@@ -33,34 +33,21 @@ USED_COLS = (
 
 COLORS = {
     'CifarMinFP-LS': 'b',
-    'CifarMinFP-LS-RNBasic': 'b',
-    'CifarJOVFPNet': 'g',
-    'CifarJOVFPNet-RNBasic': 'olive',
     'CifarPyrResNet': 'k',
-    'CifarResNet': 'k'
 }
 
 LINESTYLES = {
     'CifarMinFP-LS': '-',
-    'CifarMinFP-LS-RNBasic': '-',
-    'CifarJOVFPNet': '-.',
-    'CifarJOVFPNet-RNBasic': '-.',
     'CifarPyrResNet': '--',
-    'CifarResNet': '--'
 }
 
 SUBSETS = {
-    'ResNet': ['CifarMinFP-LS-RNBasic', 'CifarResNet'],
     'PyrResNet': ['CifarMinFP-LS', 'CifarPyrResNet'],
 }
 
 NAMES = {
     'CifarMinFP-LS': 'Min-Net',
-    'CifarMinFP-LS-RNBasic': 'Min-Net (BasicBlock)',
-    'CifarPyrResNet': 'PyrBlockNet',
-    'CifarResNet': 'ResNet',
-    'CifarJOVFPNet': 'FPNet',
-    'CifarJOVFPNet-RNBasic': 'FPNet (BasicBlock)',
+    'CifarPyrResNet': 'ResNet',
 
 }
 
