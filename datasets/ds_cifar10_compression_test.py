@@ -52,6 +52,7 @@ class Cifar10JpegCompression(Dataset):
 
 
 def create_dataset(is_train=False):
+    print('Creating compression dataset ...')
     # load the original dataset from torchvision
     dataset = datasets.CIFAR10(
         root=DATA_FOLDER, train=is_train, transform=None)
@@ -81,6 +82,7 @@ def create_dataset(is_train=False):
 
     labels_ = np.array(labels_)
     np.save(join(DATA_FOLDER, prefix + 'cifar10_jpeg_noise_labels.npy'), labels_)
+    print('... done.')
 
 
 def create_compressed_image(image, compression):

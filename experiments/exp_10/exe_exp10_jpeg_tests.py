@@ -1,22 +1,16 @@
-import sys
-sys.path.append(
-    '/nfshome/gruening/my_code/DLBio_repos/min_nets_svrhm_2021_code_submission'
-)
-
 import subprocess
 from os.path import join
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from experiments.exp_11_1.exe_eval_exp_11_1 import LINESTYLES
 import run_jpeg_robustness_tests as jpeg_test
 from DLBio import pt_run_parallel
 from DLBio.helpers import (MyDataFrame, check_mkdir, get_sub_dataframe,
                            load_json, search_rgx, set_plt_font_size)
 from DLBio.kwargs_translator import get_kwargs
-from helpers import predict_needed_gpu_memory
 from experiments.eval_methods import create_jpeg_plot, create_table
+from experiments.exp_11_1.exe_eval_exp_11_1 import LINESTYLES
+from helpers import predict_needed_gpu_memory
 
 RUN_PREDICTIONS = False
 
@@ -25,10 +19,9 @@ IMAGE_OUT = join(BASE_FOLDER, 'images')
 check_mkdir(IMAGE_OUT)
 
 MODEL_FOLDER = join(BASE_FOLDER, 'exp_data')
-RGX = r'CifarMinFP-LS(|-RNBasic)_s\d+_N\d+'
+RGX = r'Cifar(MinFP-LS|PyrResNet|ResNet)(|-RNBasic)_s\d+_N\d+'
 EXE_FILE = 'run_jpeg_robustness_tests.py'
 
-BASELINE_RESULTS = 'experiments/exp_6/eval.csv'
 
 #AVAILABLE_GPUS = [0, 1, 2, 3]
 AVAILABLE_GPUS = [0]
@@ -57,8 +50,8 @@ LINESTYLES = {
 }
 
 SUBSETS = {
-    'PyrResNet': ['CifarMinFP-LS', 'CifarPyrResNet'],
     'ResNet': ['CifarMinFP-LS-RNBasic', 'CifarResNet'],
+    'PyrResNet': ['CifarMinFP-LS', 'CifarPyrResNet'],
 }
 
 NAMES = {
@@ -98,6 +91,9 @@ def run_eval():
 
     for key, subset in SUBSETS.items():
         tmp = get_sub_dataframe(df, {'model_type': subset})
+
+        create_scatter_plot(tmp, pref=key, **plot_kwargs)
+
         create_jpeg_plot(tmp, pref=key + '_nc', key='nc', **plot_kwargs)
         create_jpeg_plot(tmp, pref=key + '_er', key='er',
                          min_q=0, **plot_kwargs)
@@ -107,6 +103,49 @@ def run_eval():
 
     create_jpeg_plot(df, pref='all_er', key='er', min_q=0, **plot_kwargs)
     create_jpeg_plot(df, pref='all_nc', key='nc', **plot_kwargs)
+
+
+def create_scatter_plot(df, *, pref, names, linestyles, colors, image_out, min_q=1, max_q=9):
+    set_plt_font_size(26)
+
+    max_q = 4
+
+    def get_data(data, key):
+        return np.array([data[f'{key}_{i}'] for i in range(min_q, max_q)])
+
+    for N in sorted(set(df['N'])):
+        plt.figure(figsize=(12, 12))
+        for mt in sorted(set(df['model_type'])):
+            for s in sorted(set(df['seed'])):
+                tmp = get_sub_dataframe(df, {
+                    'model_type': mt,
+                    'N': N,
+                    'seed': s
+                })
+
+                plot_kwargs = {
+                    'color': colors[mt],
+                    'linewidth': 2,
+                    'marker': 'd',
+                    'markersize': 18,
+                    'linestyle': linestyles[mt]
+                }
+
+                x = get_data(tmp, 'nc')
+                y = get_data(tmp, 'er')
+                plt.plot(x, y, **plot_kwargs)
+                #plt.text(x[0], y[0], s)
+
+        plt.xlabel('Perc. of changed predictions')
+        plt.ylabel('Test error')
+
+        # plt.legend()
+        plt.grid()
+        plt.tight_layout()
+
+        plt.savefig(join(image_out, f'scatter_{pref}_N{N}.png'))
+        plt.savefig(join(image_out, f'scatter_{pref}_N{N}.pdf'))
+        plt.close()
 
 
 def get_min_net_df():

@@ -1,4 +1,4 @@
-import os
+from os import walk
 from os.path import join
 import shutil
 from DLBio.helpers import check_mkdir
@@ -9,7 +9,7 @@ REMOVE_MODELS = False
 
 
 def run():
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in walk('.'):
         remove_dir(root, dirs, '__pycache__')
         remove_dir(root, dirs, 'src_copy')
         #save_and_remove_models(root, files)
