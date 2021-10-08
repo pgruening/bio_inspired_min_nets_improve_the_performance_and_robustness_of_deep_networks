@@ -9,6 +9,7 @@ from DLBio.helpers import (MyDataFrame, check_mkdir, get_sub_dataframe,
 from DLBio.kwargs_translator import get_kwargs
 from experiments.eval_methods import save_curve_plot
 from experiments.exp_10.cfg_exp10 import COLORS, RGX
+from experiments.exp_10.exe_exp10_jpeg_tests import NAMES
 from experiments.exp_11_1.exe_eval_exp_11_1 import LINESTYLES
 
 BASE_FOLDER = 'experiments/exp_10'
@@ -33,6 +34,11 @@ LINESTYLES = {
     'CifarMinFP-LS': '-',
     'CifarPyrResNet': '--',
 }
+NAMES = {
+    'CifarMinFP-LS': 'Min-Net',
+    'CifarPyrResNet': 'ResNet',
+}
+
 SUBSETS = {
     'PyrResNet': ['CifarMinFP-LS', 'CifarPyrResNet'],
 }
@@ -73,8 +79,8 @@ def run():
         save_curve_plot(
             tmp, IMAGE_FOLDER, colors_=colors, val_key=USED_METRIC,
             ylabel='Test error after 200 epochs', pref=pref + '_cifar_resnet_',
-            linestyles_=LINESTYLES, aggregator=AGGREGATOR
-        )
+            linestyles_=LINESTYLES, aggregator=AGGREGATOR,
+            new_name=NAMES)
 
 
 def get_sub_table(df, **kwargs):

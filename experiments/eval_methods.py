@@ -11,7 +11,7 @@ def save_curve_plot(
     df, out_folder, val_key='min_val_er', colors_=None,
     pref='', ylim=None, name_key='model_type', ylabel=None,
     legend_order=None, plot_std=True, aggregator='mean', plot_fill=True,
-        linestyles_=None):
+        linestyles_=None, new_name=None):
 
     set_plt_font_size(26)
     _, ax = plt.subplots(1, figsize=(15, 15))
@@ -26,10 +26,11 @@ def save_curve_plot(
 
         name = tmp.iloc[0, :][name_key][0]
 
+        label_name = new_name[name] if new_name is not None else name
         # TODO set hue order
         plot_kwargs = {
             'linewidth': 4,
-            'label': name,
+            'label': label_name,
             'marker': 'd',
             'markersize': 14,
         }
