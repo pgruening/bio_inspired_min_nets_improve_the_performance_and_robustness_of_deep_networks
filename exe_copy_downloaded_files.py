@@ -14,7 +14,7 @@ DO_COPY = True
 
 def run():
     copy_predictions()
-    # copy_models()
+    copy_models()
 
 
 def copy_predictions():
