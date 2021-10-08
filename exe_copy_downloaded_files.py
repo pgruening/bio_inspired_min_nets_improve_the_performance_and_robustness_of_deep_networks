@@ -14,7 +14,7 @@ DO_COPY = True
 
 def run():
     copy_predictions()
-    copy_models()
+    # copy_models()
 
 
 def copy_predictions():
@@ -65,7 +65,7 @@ def copy(source, target):
         shutil.copy(source, target)
 
     print((
-        'Moved: \n' +
+        'Copied: \n' +
         f'{source} \n' +
         '-> \n' +
         f'{target} \n'
