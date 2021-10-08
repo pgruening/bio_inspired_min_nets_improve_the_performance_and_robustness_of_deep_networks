@@ -28,7 +28,7 @@ Furthermore, you need to specify the variable 'DATA_FOLDER' in 'config.py'.
 
 ## Running the experiments
 
-Python modules meant to be executed include the prefix 'exe_' in their name. The experiments of the paper are located in the experiments folder. Note that each module is meant to be started from the repositories folder, e.g. to evaluate experiment 10 run:
+Python modules meant to be executed include the prefix 'exe_' in their name. The experiments of the paper are located in the 'experiments' folder. Note that each module must be started from the repositories folder, e.g. to evaluate experiment 10 run:
 
 ```
 python experiments/exp_10/exe_train_exp_10.py
@@ -41,10 +41,6 @@ Here is a list of all experiments:
 * 'exe_train_exp_10.py': retrain the networks on Cifar-10. Creates log-files in 'experiments/exp_10/exp_data'
 * 'exe_eval_exp_10.py': runs classification evaluation
 * 'exe_exp10_jpeg_tests.py': evaluates the predictions in saved in 'jpeg_model_predictions'. To again compute the predictions, run this module with the flag 'RUN_PREDICTIONS' set to 'True'
-### exp_10_1: Additional variance experiment on Cifar-10 classification
-
-* 'exe_train_exp_10_1.py': trains 12 ResNet (N=9) models on Cifar-10.
-* 'exe_eval_exp_10_1.py': computes the training curve evaluation.
 
 ### exp_11_1: DenseNet experiment on Cifar-10 classification and JPEG compression
 
@@ -60,9 +56,13 @@ Here is a list of all experiments:
 
 All models are located in the 'model' folder, the dataset code is in the 'datasets' folder.
 
-## Downloading the models
+## Downloading model.pt files and JPEG-model-predictions
 
-All models are save as a zip file on [google drive](). To add the to the respective experiment folders, extract the zip file, change the path variable 'DOWNLOADED_MODELS' in 'exe_move_models_to_exp_folder.py' and run this module. 
+Additional files containing the models and predictions can be [downloaded](https://ufile.io/f/abms2). **The download link expires on the 4th of November!** 
+To add each model and prediction to the respective experiment folders, extract the zip file, change the path variable 'DOWNLOADED_MODELS' and 'DOWNLOADED_PREDICTIONS' in 'config.py' (if necessary ) and run 'exe_move_downloaded_files.py'.
 
+
+
+To archive the repo:
 
 git archive -o min_nets_latest.zip HEAD
