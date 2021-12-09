@@ -13,7 +13,7 @@ def save_curve_plot(
         linestyles_=None, new_name=None):
 
     set_plt_font_size(26)
-    _, ax = plt.subplots(1, figsize=(15, 15))
+    _, ax = plt.subplots(1, figsize=(12, 12))
     for key in set(df['model_type']):
         tmp = df[df['model_type'] == key].copy()
         tmp = tmp.sort_values(by='N')
