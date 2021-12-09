@@ -103,6 +103,7 @@ def update(df, model_path, pred_data_path):
     for i in range(1, 10):
         out[f'er_{i}'] = jpeg_test.compute_error_for_subset(pred_data, i)
         out[f'nc_{i}'] = jpeg_test.compute_change_prob(pred_data, i)
+        jpeg_test.assert_correct_confusion_matrix(pred_data, i)
 
     out['er_0'] = log['val_er'][-1]
 

@@ -3,12 +3,12 @@ from os.path import join
 
 import numpy as np
 import torch
-from DLBio import pt_training
-from DLBio.helpers import check_mkdir, search_rgx
-from DLBio.pytorch_helpers import get_device
 from tqdm import tqdm
 
 from datasets.ds_cifar10_compression_test import Cifar10JpegCompression
+from DLBio import pt_training
+from DLBio.helpers import check_mkdir, search_rgx
+from DLBio.pytorch_helpers import get_device
 from helpers import load_model
 
 DATA_FOLDER_NAME = 'jpeg_model_predictions'
@@ -82,7 +82,7 @@ def compute_error_for_subset(X, idx):
     ----------
     X : np.array of shape (10000, 11), first column is label
     idx : int
-        which compression rate 0 = 0%, 1 = 10%, 2 = 20%, ..., 9 = 90%
+        which compression rate 1 = 100%, 2 = 90%, 3 = 80%, ..., 10 = 10%
 
     Returns
     -------
@@ -106,7 +106,7 @@ def compute_change_prob(X, idx):
     ----------
     X : np.array of shape (10000, 11), first column is label
     idx : int
-        which compression rate 0 = 0%, 1 = 10%, 2 = 20%, ..., 9 = 90%
+        which compression rate 1 = 100%, 2 = 90%, 3 = 80%, ..., 10 = 10%
 
     Returns
     -------
@@ -119,6 +119,84 @@ def compute_change_prob(X, idx):
     # compare uncompressed prediction to subset of the compressed predictions
     did_change = X[:, 0] != X[:, idx]
     return did_change.mean() * 100.
+
+
+def assert_correct_confusion_matrix(X, idx):
+    """ 
+    This functions test if the error delta and the POCP computations are sound.
+
+    The POCP can be much higher compared to the error increase between the
+    original predictions and the new predictions.
+
+    This is because the POCP observes any change in classification instead
+    of only observing which previously correct samples are now incorrect.
+
+    Furthermore, a few previously incorrect examples can become correct.
+
+    Parameters
+    ----------
+    X : np.array of shape (10000, 11), first column is label
+    idx : int
+        which compression rate 1 = 100%, 2 = 90%, 3 = 80%, ..., 10 = 10%
+
+    """
+    def _and(x, y):
+        return np.logical_and(x, y)
+
+    def _not(x):
+        return np.logical_not(x)
+
+    def almost_equal(x, y, eps=1e-6):
+        return np.abs(x - y) < eps
+
+    def compute_conf_mat(left, top, N):
+        conf_matrix = np.zeros((2, 2))
+
+        conf_matrix[0, 0] = _and(left, top).sum()
+        conf_matrix[0, 1] = _and(left, _not(top)).sum()
+        conf_matrix[1, 0] = _and(_not(left), top).sum()
+        conf_matrix[1, 1] = _and(_not(left), _not(top)).sum()
+
+        return conf_matrix / N
+
+    num_images = X.shape[0]
+    error = compute_error_for_subset(X.copy(), idx)
+    accuracy = 1. - error / 100
+
+    pocp = compute_change_prob(X.copy(), idx)
+    perc_stays_same = 1. - pocp / 100
+
+    label = X[:, 0]
+
+    # remove label
+    X = X[:, 1:]
+    was_correct = X[:, 0] == label
+    original_acc = (was_correct).mean()
+    original_error = 100. * (1. - original_acc)
+
+    stays = X[:, 0] == X[:, idx]
+    now_correct = X[:, idx] == label
+
+    # create table 1:
+    #     now_correct y | n
+    # stays: y | a | c
+    # stays: n | b | d
+    conf_mat_1 = compute_conf_mat(stays, now_correct, num_images)
+    assert almost_equal(conf_mat_1[:, 0].sum(), accuracy)
+    assert almost_equal(conf_mat_1[0, :].sum(), perc_stays_same)
+
+    # create table 2:
+    #     was_correct y | n
+    # now_correct: y | a | c
+    # now_correct: n | b | d
+    conf_mat_2 = compute_conf_mat(now_correct, was_correct, num_images)
+    assert almost_equal(conf_mat_2[:, 0].sum(), original_acc)
+    assert almost_equal(conf_mat_2[0, :].sum(), accuracy)
+
+    # orig - (now_false/was_right) + (now_right/was_false)
+    delta = - conf_mat_2[1, 0] + conf_mat_2[0, 1]
+    tmp = original_acc + delta
+    assert almost_equal(tmp, accuracy)
 
 
 if __name__ == '__main__':
