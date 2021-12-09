@@ -58,9 +58,8 @@ All models are located in the 'model' folder, the dataset code is in the 'datase
 
 ## Downloading model.pt files and JPEG-model-predictions
 
-Additional files containing the models and predictions can be [downloaded](https://ufile.io/f/y9c0m). **The download link expires on the 4th of November!** 
-To add each model and prediction to the respective experiment folders, extract the zip file, change the path variable 'DOWNLOADED_MODELS' and 'DOWNLOADED_PREDICTIONS' in 'config.py' (if necessary ) and run 'exe_move_downloaded_files.py'.
-
+Additional files containing the [models](https://drive.google.com/file/d/1PDUgwjx1RhcQWLM2ChaFBA3bQnNZp2kO/view?usp=sharing) and [predictions](https://drive.google.com/file/d/15dFVvXv83DRDJydD14ZLOjeW7CL815KM/view?usp=sharing) can be downloaded.
+To add each model and prediction to the respective experiment folders, extract the zip file, change the path variable 'DOWNLOADED_MODELS' and 'DOWNLOADED_PREDICTIONS' in 'config.py' (if necessary) and run 'exe_move_downloaded_files.py'.
 
 
 To archive the repo:
